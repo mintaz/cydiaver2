@@ -136,7 +136,7 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener, Chan
         String           props=null;
         boolean          no_channel=false;
         boolean          jmx=true;
-        boolean          use_state=false;
+        boolean          use_state=true; //Fixed: resize error
         String           group_name=null;
         long             state_timeout=5000;
         boolean          use_unicasts=false;
