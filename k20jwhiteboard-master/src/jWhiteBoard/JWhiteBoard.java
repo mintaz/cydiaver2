@@ -340,6 +340,7 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener, Chan
                     break;
                 case DrawCommand.CLEAR:
                     clearPanel();
+                    break;  //Fixed: missing break;
                 default:
                     System.err.println("***** received invalid draw command " + comm.mode);
                     break;
@@ -544,9 +545,9 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener, Chan
 		 */
 		private static final long serialVersionUID = 1L;
 		protected final Dimension         preferred_size=new Dimension(235, 170);
-        protected Image                   img; // for drawing pixels
-        protected Dimension               d, imgsize;
-        protected Graphics                gr;
+        protected Image                   img=null; // for drawing pixels
+        protected Dimension               d, imgsize=null;
+        protected Graphics                gr=null;
         protected final Map<Point,Color>  state;
 
 
@@ -585,7 +586,7 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener, Chan
                     Point point=entry.getKey();
                     Color col=entry.getValue();
                     dos.writeInt(point.x);
-                    dos.writeInt(point.x);
+                    dos.writeInt(point.y); //Fixed
                     dos.writeInt(col.getRGB());
                 }
                 dos.flush();
@@ -645,7 +646,7 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener, Chan
          * When do a mouse drag, get coordinates ( X and Y) of the mouse, then send Draw command as a message to member of Group
          */
         public void mouseDragged(MouseEvent e) {
-            int                 x=e.getX(), y=e.getX();
+            int                 x=e.getX(), y=e.getY(); //Fixed: only draw 1 lines
             DrawCommand         comm=new DrawCommand(DrawCommand.DRAW, x, y, drawColor.getRGB());
 
             if(noChannel) {
