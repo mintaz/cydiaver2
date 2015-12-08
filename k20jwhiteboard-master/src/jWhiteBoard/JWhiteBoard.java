@@ -443,14 +443,14 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener, Chan
      */
     public void actionPerformed(ActionEvent e) {
         String     command=e.getActionCommand();
-        if("Clear".equals(command)) {
+        if("Clear".equals(command)) {    //Fixed: Button is not working
             if(noChannel) {
                 clearPanel();
                 return;
             }
             sendClearPanelMsg();
         }
-        else if("Leave".equals(command)) {
+        else if("Leave".equals(command)) {   //Fixed: Button is not working
             stop();
         }
         else
