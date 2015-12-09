@@ -566,7 +566,7 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener,
 		}	
 		else if (e.getSource() == sendMsg) {
 			 	sendTextMsg(txtGroup.getText()+":"+txtMsg.getText());
-		 }/*
+		 }
 		else if (e.getSource() == background) {
 			Color c = JColorChooser.showDialog(null, "Pick your color", backgroundColor);
 			if (c != null) {
@@ -577,7 +577,7 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener,
 				defaultD.width += 1;
 				mainFrame.setBounds(defaultD);
 			}
-		}*/
+		}
 		else if (e.getSource() == brushcolor) {
 			Color d = JColorChooser.showDialog(null, "Pick your color", drawColor);
 			if (d != null) {
