@@ -29,6 +29,7 @@ import java.util.List;
 public class JWhiteBoard extends ReceiverAdapter implements ActionListener,
 		ChannelListener {
 	protected String groupName ="LMHT's TEAM"; //groupname default
+	private static int sizeBrush = 5; //size brush default
 	private JChannel channel = null;
 	private int memberSize = 1;
 	private JFrame mainFrame = null;
@@ -54,6 +55,14 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener,
     private boolean                use_unicasts=false;
     protected boolean              send_own_state_on_merge=true;
     private final                  List<Address> members=new ArrayList<Address>();
+    //-------------ham set size brush ---------//
+    private static void setSB(int SB) {
+        sizeBrush = SB;
+    }
+    //------------ham lay size brush----------//
+    public int getSizeBrush() {
+        return sizeBrush;
+    }
 
 
     
@@ -524,6 +533,9 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener,
         else if("Leave".equals(command)) {   //Fixed: Button is not working
             stop();
         }
+        else if (e.getSource() == setSBbutton) {
+            setSB(setSBbutton.getSelectedIndex() + 5);
+        }
         else if (e.getSource() == brushcolor) {
             Color d = JColorChooser.showDialog(null, "Pick your color", drawColor);
             if (d != null) {
@@ -561,7 +573,7 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener,
             return;
         for(Point point: copy.keySet()) {
             // we don't need the color: it is our draw_color anyway
-            DrawCommand comm=new DrawCommand(DrawCommand.DRAW, point.x, point.y, drawColor.getRGB());
+            DrawCommand comm=new DrawCommand(DrawCommand.DRAW, point.x, point.y, drawColor.getRGB(),sizeBrush);
             try {
                 byte[] buf=Util.streamableToByteBuffer(comm);
                 if(use_unicasts)
@@ -724,7 +736,7 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener,
          */
         public void mouseDragged(MouseEvent e) {
             int                 x=e.getX(), y=e.getY(); //Fixed: only draw 1 lines
-            DrawCommand         comm=new DrawCommand(DrawCommand.DRAW, x, y, drawColor.getRGB());
+            DrawCommand         comm=new DrawCommand(DrawCommand.DRAW, x, y, drawColor.getRGB(),sizeBrush); //gui them sizebrush
 
             if(noChannel) {
                 drawPoint(comm);
@@ -757,7 +769,7 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener,
             	return;
             Color col=new Color(c.rgb);
             gr.setColor(col);
-            gr.fillOval(c.x, c.y, 10, 10);
+            gr.fillOval(c.x, c.y, c.brushSize, c.brushSize);
             repaint();
             if(state != null) {
                 synchronized(state) {
@@ -814,6 +826,10 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener,
                 g.drawImage(img, 0, 0, null);
             }
         }
+        public void functionBrushColor() {
+            System.out.println("Brush");
+        }// method
+ 
 
     }
 
