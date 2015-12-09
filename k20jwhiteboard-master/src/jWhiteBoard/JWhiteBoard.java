@@ -26,20 +26,29 @@ import java.util.List;
  * 
  */
 
-public class JWhiteBoard extends ReceiverAdapter implements ActionListener, ChannelListener {
-    protected String               groupName="";
-    private JChannel               channel=null;
-    private int                    memberSize=1;
-    private JFrame                 mainFrame=null;
-    private JPanel                 subPanel=null;
-    private DrawPanel              drawPanel=null;
-    private JButton                clearButton, leaveButton;
+public class JWhiteBoard extends ReceiverAdapter implements ActionListener,
+		ChannelListener {
+	protected String groupName ="LMHT's TEAM"; //groupname default
+	private JChannel channel = null;
+	private int memberSize = 1;
+	private JFrame mainFrame = null;
+	private JPanel subPanel = null;
+	private DrawPanel drawPanel = null;
+	private JButton clearButton, leaveButton,background, brushcolor,
+			setTitleButton, sendMsg, btngrname = new JButton("GroupName");
+	private JTextField txtGroup, txtMsg;
+	private String wchat = "                                                              "; 
+	// kich thuoc khung chat
+	private JTextArea area = new JTextArea(wchat+wchat + "\n");
+	private JScrollPane scoll = new JScrollPane(area);
     private final Random           random=new Random(System.currentTimeMillis());
     private final Font             defaultFont=new Font("Helvetica",Font.PLAIN,12);
     private final Color            drawColor=selectColor(); //Fixed : only 1 color brush
     private static final Color     backgroundColor=Color.white;  //Fixed: background color
     boolean                        noChannel=false;
     boolean                        jmx;
+    private static String[] sListNUmber = { "5", "10", "15", "20", "25", "30", "35", "40" };
+    private static JComboBox setSBbutton = new JComboBox<String>(sListNUmber);
     private boolean                useState=false;
     private long                   stateTimeout=5000;
     private boolean                use_unicasts=false;
@@ -123,7 +132,7 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener, Chan
      */
     public void setGroupName(String groupName) {
         if(groupName != null)
-            groupName=groupName;
+            groupName= groupName; //sua gropName thanh GroupName
     }
 
 
@@ -270,24 +279,60 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener, Chan
         mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         drawPanel=new DrawPanel(useState);
         drawPanel.setBackground(backgroundColor);
+      //------------------------------------------------GUI-----------------------------------//  
+        //--------Background Color---------//
+        background = new JButton("Background");
+        background.setFont(defaultFont);
+        background.setForeground(Color.blue);
+        background.addActionListener(this);
         subPanel=new JPanel();
         mainFrame.getContentPane().add("Center", drawPanel);
+        //-------clear and leave button----//
         clearButton=new JButton("Clear"); // Fixed : change name button
         clearButton.setFont(defaultFont);
         clearButton.addActionListener(this);
         leaveButton=new JButton("Leave"); // Fixed : change name button
         leaveButton.setFont(defaultFont);
         leaveButton.addActionListener(this);
+        //---setGroup field---//
+        txtGroup = new JTextField("Enter your nickname", 26);
+        txtMsg = new JTextField("Enter yout Msg",25);
+      //----button sendMsg----//
+        sendMsg = new JButton("SendMsg");
+        sendMsg.setFont(defaultFont);
+        sendMsg.setForeground(Color.RED);
+        sendMsg.addActionListener(this);
+        //combox box set size brush-----//
+        setSBbutton.setSelectedIndex(1);
+        setSBbutton.setFont(defaultFont);
+        setSBbutton.addActionListener(this);
+        brushcolor = new JButton("Brush Color");
+        brushcolor.setFont(defaultFont);
+        brushcolor.addActionListener(this);
         subPanel.add("South", clearButton);
         subPanel.add("South", leaveButton);
+        subPanel.add("South", background);
+        subPanel.add("South", setSBbutton);
+        subPanel.add("South", brushcolor);
+        subPanel.add("South", btngrname);
+        subPanel.add("South",txtGroup);
+        subPanel.add("South", txtMsg);
+        subPanel.add("South", sendMsg);
+        txtMsg.setSize(50, 40);
         mainFrame.getContentPane().add("South", subPanel);
+        mainFrame.getContentPane().add("East", scoll);
+        area.setEditable(false);
         mainFrame.setBackground(backgroundColor);
         clearButton.setForeground(Color.blue);
         leaveButton.setForeground(Color.blue);
+        setSBbutton.setForeground(Color.blue);
+        brushcolor.setForeground(Color.blue);
+        btngrname.setForeground(Color.blue);
         mainFrame.pack();
         mainFrame.setLocation(15, 25);
-        mainFrame.setBounds(new Rectangle(250, 250));
+        mainFrame.setBounds(new Rectangle(1200, 600));
         setTitle(); //Fixed: Title Error
+        //-------------------------------------end GUI--------------------------------//
         if(!noChannel && useState) {
             channel.connect(groupName, null, stateTimeout);
         }
