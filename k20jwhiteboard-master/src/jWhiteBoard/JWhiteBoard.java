@@ -337,6 +337,30 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener,
             channel.connect(groupName, null, stateTimeout);
         }
         mainFrame.setVisible(true);
+        //---groupname button action listener-----//
+        btngrname.addActionListener(new ActionListener() {
+            
+            public void actionPerformed(ActionEvent arg0) {
+                // TODO Auto-generated method stub
+                String d= JOptionPane.showInputDialog(null, "Please Input Group Name");
+                 if(d==null){
+                        JOptionPane.showMessageDialog(null, "Please Input Group Name");
+                        channel.disconnect();
+                 }
+                 groupName=d;
+                 if(!noChannel && useState) //change: !useState to useState
+                     try {
+                        channel.disconnect();
+                        channel.connect(groupName);
+                    } catch (Exception e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                 System.out.println(groupName);
+                 setTitle(groupName);
+            
+            }
+        });
     }
 
     /**
@@ -354,6 +378,7 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener,
         }
         else {
             if(channel.getAddress() != null)
+            	tmp += getGroupName() + "-";
                 tmp+=channel.getAddress();
             tmp+=" (" + memberSize + ")";
             mainFrame.setTitle(tmp);
