@@ -524,6 +524,13 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener,
         else if("Leave".equals(command)) {   //Fixed: Button is not working
             stop();
         }
+        else if (e.getSource() == brushcolor) {
+            Color d = JColorChooser.showDialog(null, "Pick your color", drawColor);
+            if (d != null) {
+                drawColor = d;
+                drawPanel.setBackground(drawColor);
+            }
+        }
         else
             System.out.println("Unknown action");
     }
